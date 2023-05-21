@@ -11,7 +11,7 @@ export const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [lastPageNumber, setLastPageNumber] = useState(null);
   const [foundImages, setFoundImages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [existImagesToShow, setExistImagesToShow] = useState(false);
 
@@ -20,7 +20,11 @@ export const App = () => {
       return;
     }
 
-    setLoading(true);
+    if (page === 1) {
+      setFoundImages([]);
+    }
+
+    setIsLoading(true);
     setExistImagesToShow(false);
 
     ApiRequest(searchQuery, page)
@@ -57,7 +61,7 @@ export const App = () => {
       })
       .catch(error => console.log(error))
       .finally(() => {
-        setLoading(false);
+        setIsLoading(false);
         setTimeout(
           () =>
             window.scrollTo({
@@ -85,7 +89,7 @@ export const App = () => {
 
       {foundImages.length !== 0 && <ImageGallery foundImages={foundImages} />}
 
-      <Loader loading={loading} />
+      <Loader loading={isLoading} />
       {existImagesToShow && <LoadMoreBtn onLoadMoreBtn={onLoadMore} />}
       <ToastContainer />
     </div>
